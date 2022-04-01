@@ -80,7 +80,6 @@ const Post = (props) => {
     );
   }
 
-  // Type de visualisation sur Publications
   let sectionBlock;
   if (props.image_url) {
     sectionBlock = (

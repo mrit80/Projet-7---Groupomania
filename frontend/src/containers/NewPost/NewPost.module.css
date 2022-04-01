@@ -26,7 +26,7 @@
 }
 
 .tab_border {
-  border-bottom: 2px solid #c30000;
+  border-bottom: 2px solid #cf515b;
   width: 85%;
   margin: 0px auto;
 }
@@ -41,7 +41,7 @@
   text-align: center;
   text-transform: uppercase;
   margin: 1.3rem auto;
-  color: #c30000;
+  color: #cf515b;
 }
 
 .form {

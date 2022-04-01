@@ -33,7 +33,7 @@
   position: absolute;
   display: flex;
   bottom: 0;
-  background-color: #c30000;
+  background-color: #cf515b;
   width: 100%;
   color: white;
   height: 2.8rem;
@@ -80,7 +80,7 @@
 
 .red_banner_post {
   display: flex;
-  background-color: #c30000;
+  background-color: #cf515b;
   width: 100%;
   color: white;
   height: 3rem;
