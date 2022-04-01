@@ -45,7 +45,7 @@ const Post = (props) => {
     } catch (err) {}
   };
 
-  // Type de visualisation sur Publications et Réponses
+  // Type de visualisation sur Réponses
   let commentBlock;
 
   if (props.location.pathname === '/posts') {
@@ -80,6 +80,25 @@ const Post = (props) => {
     );
   }
 
+  // Type de visualisation sur Publications
+  let sectionBlock;
+  if (props.image_url) {
+    sectionBlock = (
+      <section className={styles.block}>
+        <h3 className={styles.title}>{props.title}</h3>
+        <img className={styles.photo} src={props.image_url} alt="post" />
+        <footer className={styles.reactions}>{commentBlock}</footer>
+      </section>
+    );
+  } else {
+    sectionBlock = (
+      <section className={styles.block}>
+        <h3 className={styles.title}>{props.title}</h3>
+        <footer className={styles.reactions}>{commentBlock}</footer>
+      </section>
+    );
+  }
+
   return (
     <article id={props.post_id}>
       {isLoading && (
@@ -95,11 +114,7 @@ const Post = (props) => {
         date={props.date}
         onDelete={DeletePostHandler}
       />
-      <section className={styles.block}>
-        <h3 className={styles.title}>{props.title}</h3>
-        <img className={styles.photo} src={props.image_url} alt="post" />
-        <footer className={styles.reactions}>{commentBlock}</footer>
-      </section>
+      {sectionBlock}
     </article>
   );
 };
