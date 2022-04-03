@@ -19,17 +19,18 @@ import InputField from '../../components/InputField/InputField';
 import '../Home/Home.css';
 
 const Login = () => {
-  // Authentication
+  // Authentication // Hooks de React qui valorise AuthContext
   const auth = useContext(AuthContext);
 
-  // History context
+  // History librairie qui sauvegarde le parcours pour retourner en arrière
   const history = useHistory();
 
   // Requête Hook
   const { error, sendRequest } = useHttpRequest();
 
-  // Input Hook
+  // Hook useForm pour gérer l'input email et password
   const [formState, inputHandler] = useForm(
+    // inputHandler ajourne formState
     {
       email: {
         value: '',
@@ -52,20 +53,21 @@ const Login = () => {
 
     try {
       const data = {
+        // Récupère la valeur des données stocker dans formState
         email: formState.inputs.email.value,
         password: formState.inputs.password.value,
       };
-
+      // sendRequest Hook pour faire des requête au Backend en utilisant fetch
       const responseData = await sendRequest(
         `${process.env.REACT_APP_API_URL}/login`,
         'POST',
-        JSON.stringify(data),
+        JSON.stringify(data), // envoi des données au format json de la const data au backend
         {
           'Content-Type': 'application/json',
         }
-      );
+      ); // réponse du backend
       auth.login(responseData.userId, responseData.token, responseData.account);
-      history.push('/posts');
+      history.push('/posts'); // Pour tenir compte de l'history de ma navigation
     } catch (err) {}
   };
 

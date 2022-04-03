@@ -6,6 +6,7 @@ import Post from '../../components/Post/Post';
 // Styles
 import styles from './PostList.module.css';
 
+// Recherche dans items les publications
 const PostList = (props) => {
   if (props.items.length === 0) {
     return (
@@ -14,7 +15,7 @@ const PostList = (props) => {
       </div>
     );
   }
-
+  // Pour chaque post donne le rendu composant Post (Boucle)
   return (
     <>
       {props.items.map((post) => {

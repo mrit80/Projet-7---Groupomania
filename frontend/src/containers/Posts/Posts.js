@@ -71,7 +71,7 @@ const Posts = () => {
     } catch (err) {}
   };
 
-  // Suprimer POST Handler
+  // Supprimer POST Handler
   const deletePostHandler = (deletedPostId) => {
     setPosts((prevPosts) =>
       prevPosts.filter((post) => post.post_id !== deletedPostId)

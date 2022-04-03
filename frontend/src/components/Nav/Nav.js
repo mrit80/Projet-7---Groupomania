@@ -19,14 +19,14 @@ import './Nav.css';
 const Nav = (props) => {
   // Authentication
   const auth = useContext(AuthContext);
-
+  // Recherche mon emplacement (route)
   const id = props.location.pathname.split('/')[2];
 
   const backHandle = (e) => {
     e.preventDefault();
     props.history.goBack();
   };
-
+  // Recherche sur quel route je me trouve et me donne les composants en conséquences
   let nav;
 
   switch (props.location.pathname) {

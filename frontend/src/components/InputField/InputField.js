@@ -39,7 +39,7 @@ const InputField = (props) => {
   const { id, onInput } = props;
   const { value, isValid } = inputState;
 
-  // Id du composant, la valeur capturée et sa validation de données
+  // Capture la saisie et valorise onInput
   useEffect(() => {
     onInput(id, value, isValid);
   }, [id, value, isValid, onInput]);

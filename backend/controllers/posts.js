@@ -130,7 +130,7 @@ exports.getAllPosts = (req, res, next) => {
     });
   };
 
-  // Fetch comments par post
+  // Pour chaque publication compte le nombre de réponses
   const getCommentCount = (post_id) => {
     return new Promise((resolve, reject) => {
       try {
@@ -154,12 +154,13 @@ exports.getAllPosts = (req, res, next) => {
     try {
       // Résultat des posts
       let finalPost = await getPosts();
-      // Pour chaque post, vérifier commentaires et ajoutez-les
+      // Pour chaque post, compte le nombre de commentaires et les associes à finalPost
       for (let i = 0; i < finalPost.length; i++) {
         // Résultat des commentaires
         const comments = await getCommentCount(finalPost[i].post_id);
         finalPost[i].comments = comments;
       }
+      // Résultat de chaque Post + nombre de réponses
       return finalPost;
     } catch (err) {
       return new Error(err);
@@ -181,7 +182,7 @@ exports.getAllPosts = (req, res, next) => {
 //==========================================================================================================
 exports.getOnePost = (req, res, next) => {
   const user = decodeUid(req.headers.authorization);
-  let postId = req.params.id;
+  let postId = req.params.id; // id du post qui arrive du frontend
 
   const postSql = `SELECT
                         u.id AS user_id,
@@ -210,9 +211,10 @@ exports.getOnePost = (req, res, next) => {
                         WHERE Posts_id = ?`;
   db.query(
     `${postSql}; ${commentsSql}`,
-    [user.id, postId, postId],
+    [postId, postId],
     (error, result, fields) => {
       if (!error) {
+        console.log(result);
         // "results" Table avec un élément de publication et un élément avec les réponses
         let results = [
           {
@@ -223,11 +225,11 @@ exports.getOnePost = (req, res, next) => {
             commentsCounter: result[1].length,
           },
           {
-            // Ajoute les réponses de la deuxième requête (les commentaires)
+            // Ajoute les réponses de la deuxième query (les commentaires)
             comments: [...result[1]],
           },
         ];
-        res.status(200).json(results);
+        res.status(200).json(results); // Envoi au front
       } else {
         return next(
           new HttpError(
@@ -255,10 +257,12 @@ exports.deletePost = (req, res, next) => {
 
   // Vérifier si c'est l'admin ou l'utilisateur
   if (user.clearance === 'admin') {
+    // Si admin besoin seulement de l'id du post
     string = 'DELETE FROM posts WHERE id = ?';
     inserts = [req.params.id];
     console.log('admin');
   } else {
+    // Sinon besoin de l'id du post + de l'user Id
     string = 'DELETE FROM posts WHERE id = ? AND Users_id = ?';
     inserts = [req.params.id, user.id];
     console.log('user');
@@ -268,7 +272,7 @@ exports.deletePost = (req, res, next) => {
   // Requête
   const deletePost = db.query(sql, (error, result) => {
     if (!error) {
-      // Supprimer l'image dans le serveur
+      // Contrôle si il y a une image et la supprime
       if (imagePath != '') {
         fs.unlink(imagePath, (err) => {
           console.log(err);
@@ -292,17 +296,19 @@ exports.deleteComment = (req, res, next) => {
 
   // Vérifier si c'est l'admin ou l'utilisateur
   if (user.clearance === 'admin') {
+    // Si admin besoin seulement de l'id du post
     string = 'DELETE FROM comments WHERE id = ?';
     inserts = [req.params.id];
     console.log('admin');
   } else {
+    // Sinon besoin de l'id du post + de l'user Id
     string = 'DELETE FROM comments WHERE id = ? AND Users_id = ?';
     inserts = [req.params.id, user.id];
     console.log('user');
   }
   const sql = mysql.format(string, inserts);
 
-  // Requête
+  // Supprimer
   const deleteComment = db.query(sql, (error, result) => {
     if (!error) {
       res.status(200).json({ message: 'Réponse supprimé !' });

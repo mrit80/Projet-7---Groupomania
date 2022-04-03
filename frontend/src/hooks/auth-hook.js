@@ -3,19 +3,19 @@ import { useState, useCallback, useEffect } from 'react';
 let logoutTimer;
 
 export const useAuth = () => {
-  // UseState du AuthContext
+  // Initialisation de l'état des variables token, user ID, account, tokenExpiration
   const [token, setToken] = useState(false);
   const [userId, setUserId] = useState(false);
   const [account, setAccount] = useState(false);
   const [tokenExpirationDate, setTokenExpirationDate] = useState();
 
-  // Login usCallback pour ne pas rentrer dans un cycle infinit
+  // useCallback recherche et stocke les variables globales dont il a besoins
   const login = useCallback((userId, token, account, expirationDate) => {
     setUserId(userId);
     setToken(token);
     setAccount(account);
 
-    // Creér une date de 24h (temps de la validité de la session)
+    // Crée une date de 24h (temps de la validité de la session) une fois qu'il a un token
     const tokenExpirationDate =
       expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60 * 24);
     setTokenExpirationDate(tokenExpirationDate);
@@ -41,7 +41,7 @@ export const useAuth = () => {
     localStorage.removeItem('userData');
   }, []);
 
-  // Temps de la session
+  // Gére le temps de la session et déconnecte l'utilisateur à la fin
   useEffect(() => {
     if (token && tokenExpirationDate) {
       const remainingTime =

@@ -77,7 +77,7 @@ const NewPost = (props) => {
     props.history.goBack();
   };
 
-  // Affichage les boutons pour Desktop
+  // Afficher les boutons pour Desktop
   let sendBtn;
   let backBtn;
 

@@ -7,7 +7,7 @@ export const useHttpRequest = () => {
 
   const activeRequest = useRef([]);
 
-  // Fonction fetch avec callBack pour éviter des loops infinits
+  // Fonction fetch avec callBack pour requêter le backend
   const sendRequest = useCallback(
     async (url, method = '', body = null, headers = {}) => {
       setIsLoading(true);
@@ -42,7 +42,7 @@ export const useHttpRequest = () => {
     setError(null);
   };
 
-  // Annule la requête
+  // Pour toutes les requêtes active les annuler
   useEffect(() => {
     return () => {
       activeRequest.current.forEach((abortCtrl) => abortCtrl.abort());
